@@ -1,22 +1,8 @@
+import { cart, addToCart } from "../data/cart.js"
+import { products } from "../data/products.js"
+
 let products_container = document.querySelector('.js-products-grid')
 
-/*
-{
-id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-image: "images/products/athletic-cotton-socks-6-pairs.jpg",
-name: "Black and Gray Athletic Cotton Socks - 6 Pairs",
-rating: {
-  stars: 4.5,
-  count: 87
-},
-priceCents: 1090,
-keywords: [
-  "socks",
-  "sports",
-  "apparel"
-]
-}
-*/
 products.forEach(
   (product) => {
     products_container.innerHTML +=  `
@@ -72,34 +58,20 @@ products.forEach(
   }
 )
 
+function updateCartQuantity (){
+  let totalQuantity = 0
+  cart.forEach((cartItem) => totalQuantity += cartItem.quantity)
+
+  document.querySelector('.js-cart-quantity').innerHTML = totalQuantity
+}
 
 document.querySelectorAll('.js-add-to-cart-button').forEach(
   (button) => {
     button.addEventListener('click', () => {
       const productId = button.dataset.productId
 
-      let matchingItem
-
-      cart.forEach((item) => {
-        if(item.id === productId)
-          matchingItem = item
-      })
-
-      if(matchingItem)
-        matchingItem.quantity++
-      else 
-        cart.push({
-          id: productId,
-          quantity: 1
-        })
-
-      let totalQuantity = 0
-      cart.forEach((item) => totalQuantity += item.quantity)
-
-      document.querySelector('.js-cart-quantity').innerHTML = totalQuantity
+      addToCart(productId)
+      updateCartQuantity()
     })
   }
 )
-
-
-
